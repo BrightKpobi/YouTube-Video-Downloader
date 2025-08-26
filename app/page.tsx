@@ -36,8 +36,13 @@ export default function Home() {
         if (match) filename = match[1];
       }
 
-      // Get total size from Content-Length header
-      const total = Number(res.headers.get("Content-Length")) || 0;
+      // ----------------- The fix is here -----------------
+      // Check if res.body is null before trying to get the reader
+      if (!res.body) {
+        setError("Download failed: No response body.");
+        setDownloading(false);
+        return;
+      }
 
       // Read the stream in chunks
       const reader = res.body.getReader();
@@ -53,6 +58,9 @@ export default function Home() {
           setProgress(Math.round((receivedLength / total) * 100));
         }
       }
+
+      // Get total size from Content-Length header
+      const total = Number(res.headers.get("Content-Length")) || 0;
 
       // Combine chunks into a blob
       const blob = new Blob(chunks, { type: "video/mp4" });
