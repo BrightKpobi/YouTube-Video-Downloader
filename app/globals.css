@@ -152,7 +152,20 @@ nav {
 }
 
 /* For history page cards */
+/* .history-card {
+  background-color: #181830;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+} */
+
 .history-card {
+  display: grid;
+  grid-template-rows: repeat(2, auto);
   background-color: #181830;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
