@@ -36,7 +36,9 @@ export default function Home() {
         if (match) filename = match[1];
       }
 
-      // ----------------- The fix is here -----------------
+      // Get total size from Content-Length header BEFORE the loop
+      const total = Number(res.headers.get("Content-Length")) || 0;
+
       // Check if res.body is null before trying to get the reader
       if (!res.body) {
         setError("Download failed: No response body.");
@@ -58,9 +60,6 @@ export default function Home() {
           setProgress(Math.round((receivedLength / total) * 100));
         }
       }
-
-      // Get total size from Content-Length header
-      const total = Number(res.headers.get("Content-Length")) || 0;
 
       // Combine chunks into a blob
       const blob = new Blob(chunks, { type: "video/mp4" });

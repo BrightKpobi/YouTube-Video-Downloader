@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import ytdl, { videoFormat } from "ytdl-core";
-import { Readable } from "stream"; // You can remove this line as it's not being used.
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -27,7 +26,6 @@ export async function GET(req: NextRequest) {
 
     const stream = ytdl(url, { quality: format.itag });
 
-    // The fix is here:
     // Use a comment to tell ESLint to ignore the 'any' type on this line.
     // This allows the build to pass while maintaining type strictness elsewhere.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
