@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { Readable } from "stream";
-import ytdl, { videoFormat } from "ytdl-core"; // Import videoFormat here
+import ytdl, { videoFormat } from "ytdl-core";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -25,10 +25,12 @@ export async function GET(req: NextRequest) {
     const format = ytdl.chooseFormat(mp4Formats, { quality: "highest" });
     const contentLength = format.contentLength || "0";
 
+    // --- The change is here ---
+    // Create the stream but don't convert it to a web stream
     const stream = ytdl(url, { quality: format.itag });
-    const readableStream = Readable.toWeb(stream);
 
-    return new Response(readableStream, {
+    // Pass the Node.js stream directly to the Response object
+    return new Response(stream as any, {
       headers: {
         "Content-Type": "video/mp4",
         "Content-Disposition": `attachment; filename="${title}.mp4"`,
