@@ -2,16 +2,28 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
+// Define the type for the history items
+interface HistoryItem {
+  title: string;
+  thumbnail: string;
+  date: string;
+}
+
 export default function History() {
-  const [history, setHistory] = useState([]);
+  // Correctly type the state as an array of HistoryItem
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [menuOpen, setMenuOpen] = useState<number | null>(null);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("downloadHistory") || "[]");
+    // Type assertion to tell TypeScript the shape of the parsed data
+    const saved = JSON.parse(
+      localStorage.getItem("downloadHistory") || "[]"
+    ) as HistoryItem[];
     setHistory(saved);
   }, []);
 
   const handleDelete = (idx: number) => {
+    // Type the 'idx' parameter
     const updated = history.filter((_, i) => i !== idx);
     setHistory(updated);
     localStorage.setItem("downloadHistory", JSON.stringify(updated));
