@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function History() {
   const [history, setHistory] = useState([]);
@@ -71,10 +72,13 @@ export default function History() {
                     <button onClick={() => handleDelete(idx)}>Delete</button>
                   </div>
                 )}
-                <img
+                <Image
                   className="thumbnail"
                   src={item.thumbnail}
                   alt={item.title}
+                  width={400}
+                  height={225}
+                  style={{ objectFit: "cover", borderRadius: "12px" }}
                 />
                 <div className="details">
                   <h3>{item.title}</h3>

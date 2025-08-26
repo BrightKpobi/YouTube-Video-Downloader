@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
-import ytdl from "ytdl-core";
+// @ts-ignore
+const ytdl = require("ytdl-core");
 import { Readable } from "stream";
 
 export async function GET(req: NextRequest) {
@@ -42,7 +43,9 @@ export async function GET(req: NextRequest) {
   } catch (error: unknown) {
     console.error("Download error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({
+        error: error instanceof Error ? error.message : "Unknown error",
+      }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
