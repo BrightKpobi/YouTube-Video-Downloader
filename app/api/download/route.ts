@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { Readable } from "stream";
+import ytdl, { videoFormat } from "ytdl-core";
 
 export async function GET(req: NextRequest) {
   const ytdl = (await import("ytdl-core")).default;
@@ -19,14 +20,11 @@ export async function GET(req: NextRequest) {
     const info = await ytdl.getInfo(url);
     const title = info.videoDetails.title.replace(/[^\w\s]/gi, "");
 
+    // <-- 2. This is the corrected line that fixes the error
     const mp4Formats = info.formats.filter(
-      (f: unknown) =>
-        typeof f === "object" &&
-        f !== null &&
-        (f as any).container === "mp4" &&
-        (f as any).hasVideo &&
-        (f as any).hasAudio
+      (f: videoFormat) => f.container === "mp4" && f.hasVideo && f.hasAudio
     );
+
     const format = ytdl.chooseFormat(mp4Formats, { quality: "highest" });
     const contentLength = format.contentLength || "0";
 
@@ -53,3 +51,16 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+// next.config.js
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+        pathname: "/vi/**/mqdefault.jpg",
+      },
+    ],
+  },
+};
