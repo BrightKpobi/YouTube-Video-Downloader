@@ -2,9 +2,7 @@ import { NextRequest } from "next/server";
 import { Readable } from "stream";
 
 export async function GET(req: NextRequest) {
-  // Use require inside the function to avoid build errors
-  // @ts-expect-error ytdl-core is CommonJS
-  const ytdl = require("ytdl-core");
+  const ytdl = (await import("ytdl-core")).default;
 
   const { searchParams } = new URL(req.url);
   const rawUrl = searchParams.get("url");
@@ -22,7 +20,12 @@ export async function GET(req: NextRequest) {
     const title = info.videoDetails.title.replace(/[^\w\s]/gi, "");
 
     const mp4Formats = info.formats.filter(
-      (f: any) => f.container === "mp4" && f.hasVideo && f.hasAudio
+      (f: unknown) =>
+        typeof f === "object" &&
+        f !== null &&
+        (f as any).container === "mp4" &&
+        (f as any).hasVideo &&
+        (f as any).hasAudio
     );
     const format = ytdl.chooseFormat(mp4Formats, { quality: "highest" });
     const contentLength = format.contentLength || "0";
