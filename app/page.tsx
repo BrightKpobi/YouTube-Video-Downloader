@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./globals.css";
+import Image from "next/image";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -8,6 +9,13 @@ export default function Home() {
   const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState("");
   const [videoTitle, setVideoTitle] = useState("");
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    // Only runs in the browser
+    const saved = JSON.parse(localStorage.getItem("downloadHistory") || "[]");
+    setHistory(saved);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,6 +95,7 @@ export default function Home() {
       setProgress(100);
       setDownloading(false);
     } catch (err) {
+      console.error(err);
       setError("Something went wrong.");
       setDownloading(false);
     }
@@ -141,6 +150,29 @@ export default function Home() {
         <div className="card">
           <h2>Secure</h2>
           <p>Your privacy is guaranteed.</p>
+        </div>
+      </div>
+
+      {/* History Section */}
+      <div className="history">
+        <h2>Download History</h2>
+        <div className="history-items">
+          {history.map((item, index) => (
+            <div className="history-item" key={index}>
+              <Image
+                className="thumbnail"
+                src={item.thumbnail}
+                alt={item.title}
+                width={400}
+                height={225}
+                style={{ objectFit: "cover", borderRadius: "12px" }}
+              />
+              <div className="history-info">
+                <div className="history-title">{item.title}</div>
+                <div className="history-date">{item.date}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>

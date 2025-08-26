@@ -39,11 +39,14 @@ export async function GET(req: NextRequest) {
         "Content-Length": contentLength,
       },
     });
-  } catch (error: any) {
-    console.error("Download error:", error); // Add this line
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+  } catch (error: unknown) {
+    console.error("Download error:", error);
+    return new Response(
+      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
