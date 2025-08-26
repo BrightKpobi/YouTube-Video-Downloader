@@ -1,10 +1,8 @@
 import { NextRequest } from "next/server";
 import { Readable } from "stream";
-import ytdl from "ytdl-core";
+import ytdl, { videoFormat } from "ytdl-core"; // Import videoFormat here
 
 export async function GET(req: NextRequest) {
-  // The duplicate line has been removed from here
-
   const { searchParams } = new URL(req.url);
   const rawUrl = searchParams.get("url");
   const url = rawUrl?.split("&")[0]?.split("?")[0] || "";
@@ -21,7 +19,7 @@ export async function GET(req: NextRequest) {
     const title = info.videoDetails.title.replace(/[^\w\s]/gi, "");
 
     const mp4Formats = info.formats.filter(
-      (f: any) => f.container === "mp4" && f.hasVideo && f.hasAudio
+      (f: videoFormat) => f.container === "mp4" && f.hasVideo && f.hasAudio
     );
 
     const format = ytdl.chooseFormat(mp4Formats, { quality: "highest" });

@@ -9,7 +9,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [videoTitle, setVideoTitle] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setProgress(0);
