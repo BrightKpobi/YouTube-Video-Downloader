@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-// @ts-ignore
-const ytdl = require("ytdl-core");
+import * as ytdl from "ytdl-core";
 import { Readable } from "stream";
 
 export async function GET(req: NextRequest) {
