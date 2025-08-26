@@ -118,7 +118,7 @@ export default function Home() {
               {downloading ? "Downloading..." : "Download"}
             </button>
             {/* Real Progress bar */}
-            {downloading && progress < 100 && (
+            {downloading && (
               <div className="progress-container">
                 <div
                   className="progress-bar"
