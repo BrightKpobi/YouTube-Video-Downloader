@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { Readable } from "stream";
-import ytdl, { videoFormat } from "ytdl-core";
+import ytdl from "ytdl-core";
 
 export async function GET(req: NextRequest) {
   // The duplicate line has been removed from here
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const title = info.videoDetails.title.replace(/[^\w\s]/gi, "");
 
     const mp4Formats = info.formats.filter(
-      (f: videoFormat) => f.container === "mp4" && f.hasVideo && f.hasAudio
+      (f: any) => f.container === "mp4" && f.hasVideo && f.hasAudio
     );
 
     const format = ytdl.chooseFormat(mp4Formats, { quality: "highest" });
